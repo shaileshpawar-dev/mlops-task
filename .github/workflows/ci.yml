@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run unit tests
+        run: pytest tests/ -v
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      # Mirrors exactly what the evaluator runs, so a red CI badge means
+      # the submission would auto-fail the Dockerization criterion.
+      - name: Build image
+        run: docker build -t mlops-task .
+
+      - name: Run container (named, not --rm, so we can inspect output)
+        run: docker run --name mlops-run mlops-task
+
+      - name: Verify metrics.json was produced with status=success
+        run: |
+          docker cp mlops-run:/app/metrics.json ./metrics.json
+          python -c "
+          import json
+          with open('metrics.json') as f:
+              m = json.load(f)
+          assert m['status'] == 'success', f'unexpected status: {m}'
+          print('metrics.json OK:', m)
+          "
+
+      - name: Clean up container
+        if: always()
+        run: docker rm -f mlops-run
