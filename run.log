@@ -1,0 +1,9 @@
+2026-07-01 07:54:20 | INFO | Job start
+2026-07-01 07:54:20 | INFO | Config loaded + validated (seed=42, window=5, version=v1)
+2026-07-01 07:54:20 | INFO | Random seed set to 42 for deterministic run
+2026-07-01 07:54:20 | INFO | Rows loaded: 10000
+2026-07-01 07:54:20 | INFO | Processing step: computing rolling mean (window=5)
+2026-07-01 07:54:20 | INFO | Processing step: generating binary signal (close > rolling_mean)
+2026-07-01 07:54:20 | INFO | Metrics summary: rows_processed=10000, signal_rate=0.4991, latency_ms=16
+2026-07-01 07:54:20 | INFO | Metrics written to metrics.json
+2026-07-01 07:54:20 | INFO | Job end | status=success

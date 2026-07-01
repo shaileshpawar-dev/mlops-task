@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+tests/
+.git/
+.github/
+.venv/
+venv/
+*.egg-info/
+metrics.json
+run.log
+README.md
+Makefile
+requirements-dev.txt
